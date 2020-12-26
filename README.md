@@ -60,9 +60,6 @@ tree.a = { ...tree.a }
 // a is fired but b, c and d are not fired
 tree.a = { e: 1 }
 // 👉 a { e: 1 }
-// 👉 b undefined
-// 👉 c undefined
-// 👉 d undefined
 // b, c and d have been deleted so we just notify with undefined
 ```
 
