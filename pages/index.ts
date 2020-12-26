@@ -48,8 +48,6 @@ const test = () => {
   }
 
   {
-    counter.reset()
-    console.log('counter.counter', counter.counter)
     set(['a'], { f: 1 })
     const expected = { a: 1, 'a.b': 1, 'a.b.c': 1, 'a.b.c.d': 1 }
     assert(isEqual(counter.counter, expected), 'overwrite a failed', counter.counter)
