@@ -1,55 +1,73 @@
-console.clear()
-console.log('hi')
+import { assert } from './../src/libs/assert'
+import { isEqual } from 'lodash'
+import { createStateTree } from '../src/libs/observableStateTree'
+import { Counter } from '../src/libs/Counter'
+const test = () => {
+  console.clear()
+  console.log('===== 🐎 ===== ')
+  const counter = new Counter()
 
-const createStateTree = (initial: any) => {
-  const listenerTree = {}
-  const stateTree = initial
-  const listen = (selector: any, callback: (x: any) => void) => {}
+  const { get, set, listen } = createStateTree({ a: { b: { c: 1, d: 1 } } })
 
-  const createProxy = (val: any): any => {
-    const node = {}
-    return new Proxy(node, {
-      get: (target, key, receiver) => {
-        console.log('get', 'key', key)
-        return stateTree[key]
-      },
-      set: (target, key, value, receiver) => {
-        console.log('set', 'key', key, 'value', value)
-        stateTree[key] = value
-        return true
-      },
-    })
+  const destroyRoot = listen([], counter.update('root'))
+  const destroyA = listen(['a'], counter.update('a'))
+  const destroyB = listen(['a', 'b'], counter.update('a.b'))
+  const destroyC = listen(['a', 'b', 'c'], counter.update('a.b.c'))
+  const destroyD = listen(['a', 'b', 'd'], counter.update('a.b.c.d'))
+  destroyRoot()
+
+  {
+    const expected = { root: 1, a: 1, 'a.b': 1, 'a.b.c': 1, 'a.b.c.d': 1 }
+    assert(isEqual(counter.counter, expected), 'initial setup', counter.counter)
+    console.log('✅ initial setup')
+    counter.reset()
   }
 
-  const tree = createProxy(initial)
-  return { tree, listen }
+  {
+    set(['a', 'b', 'c'], 2)
+    const expected = { a: 1, 'a.b': 1, 'a.b.c': 1 }
+    assert(isEqual(counter.counter, expected), 'a.b.c update')
+    console.log('✅ assert a, b and c are fired but sibling d is not fired. root should also not be fired')
+    counter.reset()
+  }
+
+  {
+    set(['a'], { ...get(['a']) })
+    const expected = { a: 1 }
+    assert(isEqual(counter.counter, expected), 'update a failed', counter.counter)
+    console.log('✅ update just a')
+    counter.reset()
+  }
+
+  {
+    set(['a'], { ...get(['a']), e: 1 })
+    const expected = { a: 1 }
+    assert(isEqual(counter.counter, expected), 'add attr to a failed', counter.counter)
+    console.log('✅ add attr to a')
+    counter.reset()
+  }
+
+  {
+    counter.reset()
+    console.log('counter.counter', counter.counter)
+    set(['a'], { f: 1 })
+    const expected = { a: 1, 'a.b': 1, 'a.b.c': 1, 'a.b.c.d': 1 }
+    assert(isEqual(counter.counter, expected), 'overwrite a failed', counter.counter)
+    console.log('✅ overwrite a passed')
+    counter.reset()
+  }
+
+  destroyA()
+  destroyB()
+  destroyC()
+  destroyD()
 }
-
-// we want to return a proxy
-// when we access a child we should get the value from the state but return the proxy
-// when we set a child we should recursively set the state
-//  - if we have a value
-const { tree, listen } = createStateTree({})
-tree.a = {}
-tree.a.b = 1
-console.log('tree.a_val', tree.a._val)
-tree.a = 2
-console.log('tree.a_val', tree.a._val)
-
-// we could simplify and not use proxies
-
-// build a recursive proxy which always returns a proxy
-// use .val to access the val?
-
-// const { tree, listen } = createStateTree({ a: { b: { c: 1, d: 1 } } });
-// console.log(tree);
-// console.log(tree.a);
-// console.log(tree.a.b);
-// tree.a = { f: 1 };
-// tree.a.b = { f: 2 };
-// console.log(tree);
-// const destroy = listen(tree, (tree) => console.log("tree", tree));
 
 export default function Home() {
   return 'hey'
+}
+
+export function getServerSideProps() {
+  test()
+  return { props: {} }
 }
