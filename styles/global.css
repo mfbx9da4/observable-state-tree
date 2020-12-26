@@ -8,6 +8,13 @@ body {
   font-size: 18px;
 }
 
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #333;
+    color: white;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
