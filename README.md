@@ -82,8 +82,8 @@ Getting a particular path will just return that node of the state tree:
 Setting a particular path with a value will:
 
 - Update state tree
-- Traverse parents => notify with new value
-- Traverse listener children => notify with new value
+- Traverse parents and notify with new value
+- Traverse listener children and notify with new value
 
 Use proxies for dot notation.
 
