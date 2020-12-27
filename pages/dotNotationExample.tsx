@@ -3,6 +3,7 @@ import { isEqual } from 'lodash'
 import { createStateTree } from '../src/observableStateTree'
 import { Counter } from '../utils/Counter'
 import { createDotNotationProxy } from '../src/dotNotationProxy'
+import { useEffect } from 'react'
 
 const createTree = (initial: any) => {
   const { get, set, listen } = createStateTree(initial)
@@ -58,6 +59,7 @@ const test = () => {
 }
 
 export default function Home() {
+  useEffect(test, [])
   return 'hey'
 }
 

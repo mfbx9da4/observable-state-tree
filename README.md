@@ -65,7 +65,7 @@ tree.a = { e: 1 }
 
 ## Implementation Sketch
 
-Intercept get and set with proxies.
+Use proxies for dot notation.
 Data structure consists of two trees:
 
 - state tree
@@ -80,11 +80,9 @@ Each node in the listener tree has:
 - parent listeners
 - listenerCallbacks
 
-On intercept get node:
+Getting a particular path will just return that node of the state tree:
 
-- return state tree at that node.
-
-On intercept set node:
+Setting a particular path with a value will:
 
 - update state tree
 - traverse parents => notify with new value
