@@ -1,6 +1,6 @@
 # Observable state tree
 
-## Problem statement
+### Problem statement
 
 Create an observable state tree.
 
@@ -19,7 +19,7 @@ Performance requirements:
 
 - Modifying the tree should happen in O(1) time
 
-## Suggested API
+### Suggested API
 
 ```js
 const tree = createTree({ a: { b: { c: 1, d: 1 } } })
@@ -63,7 +63,7 @@ tree.a = { e: 1 }
 // b, c and d have been deleted so we just notify with undefined
 ```
 
-## Implementation Sketch
+### Implementation Sketch
 
 Use proxies for dot notation.
 Data structure consists of two trees:
