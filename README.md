@@ -71,8 +71,8 @@ Data structure will consist of two trees:
 - State tree
 - Listener tree
 
-State tree is a standard object which is the actual state tree object.
-Listener tree is the tree of listeners.
+The state tree is a standard object which is nothing more than a nested javascript object.
+The listener tree is the tree of listeners.
 
 Each node in the listener tree has:
 
