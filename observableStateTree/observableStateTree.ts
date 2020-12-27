@@ -1,8 +1,9 @@
 import { assert } from '../utils/assert'
 
-type Callback = (value: any, prevValue: any) => void
+export type Callback = (value: any, prevValue: any) => void
 
 type DestroyCallback = () => void
+
 interface ListenerNode {
   parent: Symbol | ListenerNode
   children: Record<string, ListenerNode>
@@ -10,78 +11,35 @@ interface ListenerNode {
   listeners: Callback[]
 }
 
-export const createStateTree = (initial: any = {}) => {
-  let stateTree: any = initial
+export interface StateTree {
+  get: (path?: string[]) => any
+  set: (path: string[], value: any) => void
+  listen: (path: string[], callback: Callback) => DestroyCallback
+}
+
+export const createStateTree = (initial: any = {}): StateTree => {
   const root = Symbol()
+  let stateTree: any = initial
   const listenerTree: ListenerNode = { parent: root, children: {}, listeners: [], prevValue: initial }
-  const listen = (path: string[], callback: Callback): DestroyCallback => {
-    let node = listenerTree
-    const value = get(path)
-    for (let i = 0; i < path.length; i++) {
-      const key = path[i]
-      let next = node.children[key]
-      if (!next) {
-        next = { parent: node, children: {}, listeners: [], prevValue: value }
-        node.children[key] = next
-      }
-      node = next
-    }
-    node.listeners.push(callback)
-    callback(value, value)
-    return () => {
-      const i = node.listeners.findIndex((x) => x === callback)
-      node.listeners.splice(i, 1)
-    }
-  }
 
-  const notify = (path: string[]) => {
-    let stateNode = stateTree
-    let listenerNode = listenerTree
-    const empty = {}
-
-    // notify root listeners
-    listenerNode.listeners.map((x) => x(stateNode, listenerNode.prevValue))
-
-    // notify parents
-    for (let i = 0; i < path.length; i++) {
-      const key = path[i]
-      stateNode = (stateNode || empty)[key]
-      listenerNode = listenerNode.children[key]
-      if (!listenerNode) break
-      // add parent listeners
-      listenerNode.listeners.map((x) => x(stateNode, listenerNode.prevValue))
+  const get = (path: string[] = []): any => {
+    // returns the value directly from the state tree
+    let node = stateTree
+    for (const key of path) {
+      node = node[key]
     }
-
-    let queue: [ListenerNode, any][] = []
-    if (listenerNode) {
-      // notify children
-      queue.push([listenerNode, stateNode])
-      while (queue.length) {
-        ;[listenerNode, stateNode] = queue.shift() as [ListenerNode, any]
-        for (const key in listenerNode.children) {
-          const child = listenerNode.children[key]
-          const childValue = (stateNode || empty)[key]
-          const { prevValue } = child
-          if (childValue !== prevValue) {
-            // update prevValue and notify children
-            child.prevValue = childValue
-            child.listeners.map((x) => x(childValue, prevValue))
-            queue.push([child, childValue])
-          }
-        }
-      }
-    }
+    return node
   }
 
   const set = (path: string[] = [], value: any) => {
     assert(Array.isArray(path), 'path must be array', { path })
 
-    // update the root
     if (!path.length) {
+      // update the root
       stateTree = value
     }
 
-    // update a deep key
+    // update a deeply nested key
     let node = stateTree
     for (let i = 0; i < path.length; i++) {
       const key = path[i]
@@ -97,14 +55,75 @@ export const createStateTree = (initial: any = {}) => {
       node = next
     }
 
+    // now notify listeners of the update
     return notify(path)
   }
-  const get = (path: string[] = []): any => {
-    let node = stateTree
-    for (const key of path) {
-      node = node[key]
+
+  const listen = (path: string[], callback: Callback): DestroyCallback => {
+    let node = listenerTree
+    for (let i = 0; i < path.length; i++) {
+      const key = path[i]
+      let next = node.children[key]
+      if (!next) {
+        // auto create the listener tree
+        next = { parent: node, children: {}, listeners: [], prevValue: undefined }
+        node.children[key] = next
+      }
+      node = next
     }
-    return node
+
+    const value = get(path)
+    node.prevValue = value
+    node.listeners.push(callback)
+
+    // notify this new listener inline for the first time
+    callback(value, value)
+
+    return () => {
+      // tear down
+      const i = node.listeners.findIndex((x) => x === callback)
+      node.listeners.splice(i, 1)
+    }
   }
+
+  const notify = (path: string[]) => {
+    let stateNode = stateTree
+    let listenerNode = listenerTree
+    const empty = {}
+
+    // notify root listeners
+    listenerNode.listeners.map((x) => x(stateNode, listenerNode.prevValue))
+
+    for (let i = 0; i < path.length; i++) {
+      // notify parents
+      const key = path[i]
+      stateNode = (stateNode || empty)[key]
+      listenerNode = listenerNode.children[key]
+      if (!listenerNode) break
+      listenerNode.listeners.map((x) => x(stateNode, listenerNode.prevValue))
+    }
+
+    let queue: [ListenerNode, any][] = []
+    if (listenerNode) {
+      // notify children
+      queue.push([listenerNode, stateNode])
+      while (queue.length) {
+        ;[listenerNode, stateNode] = queue.shift() as [ListenerNode, any]
+        for (const key in listenerNode.children) {
+          const child = listenerNode.children[key]
+          const childValue = (stateNode || empty)[key]
+          const { prevValue } = child
+          if (childValue !== prevValue) {
+            // skip notifying children which have not changed
+            // for those that have, update prevValue and notify children
+            child.prevValue = childValue
+            child.listeners.map((x) => x(childValue, prevValue))
+            queue.push([child, childValue])
+          }
+        }
+      }
+    }
+  }
+
   return { set, get, listen }
 }

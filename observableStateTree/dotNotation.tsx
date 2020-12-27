@@ -1,4 +1,4 @@
-import { createStateTree } from './observableStateTree'
+import { Callback, createStateTree } from './observableStateTree'
 import { createDotNotationProxy } from './dotNotationProxy'
 
 export const createStore = (initial: any) => {
@@ -6,7 +6,7 @@ export const createStore = (initial: any) => {
   const specialKeys = new Set(['val', 'listen'])
   const onGet = (key: string, path: string[]) => {
     if (key === 'val') return get(path)
-    if (key === 'listen') return (callback: (x: any) => void) => listen(path, callback)
+    if (key === 'listen') return (callback: Callback) => listen(path, callback)
   }
   return createDotNotationProxy(onGet, set, specialKeys) as any
 }
