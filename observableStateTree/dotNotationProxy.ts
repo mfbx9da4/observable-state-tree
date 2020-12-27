@@ -1,22 +1,25 @@
 export const createDotNotationProxy = (
-  onGet: (key: string, path: string[]) => unknown,
+  onGet: (key: symbol, path: string[]) => unknown,
   onSet: (path: string[], value: unknown) => void,
-  specialKeys: Set<string>,
+  specialKeys: Set<symbol>,
   path: string[] = []
 ): typeof Proxy => {
   return new Proxy(
     {},
     {
-      get: (target, key: string) => {
-        if (specialKeys.has(key)) return onGet(key, path)
-        return createDotNotationProxy(onGet, onSet, specialKeys, [...path, key])
-      },
-      set: (target: any, key: string, value: unknown) => {
-        if (specialKeys.has(key)) {
-          throw new Error(`sorry you may not use "${key}" as a key`)
+      get: (target, key: string | symbol) => {
+        if (typeof key === 'string') {
+          return createDotNotationProxy(onGet, onSet, specialKeys, [...path, key])
         }
-        onSet([...path, key], value)
-        return true
+        if (specialKeys.has(key)) return onGet(key, path)
+        throw new Error('symbol keys are not supported')
+      },
+      set: (target: any, key: string | symbol, value: unknown) => {
+        if (typeof key === 'string') {
+          onSet([...path, key], value)
+          return true
+        }
+        throw new Error('symbol keys are not supported')
       },
     }
   )

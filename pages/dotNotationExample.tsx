@@ -3,21 +3,21 @@ import { createStore } from '../observableStateTree/dotNotation'
 
 const test = () => {
   console.clear()
-  const tree = createStore({ a: { b: { c: 1, d: 1 } } })
+  const { tree, listen, val } = createStore({ a: { b: { c: 1, d: 1 } } })
   // the tree behaves like a normal object e.g
-  console.log('tree', tree.val)
+  console.log('tree', val(tree))
   // prints the object 👉 { a: { b: { c : 1, d: 1 } } }
 
   // we can setup listeners
-  const destroyRoot = tree.listen((root: any) => console.log('root', root))
+  const destroyRoot = listen(tree, (root: any) => console.log('root', root))
   // on initial setup prints the full tree 👉 root { a: { b: { c: 1, d: 1 } } }
-  const destroyA = tree.a.listen((a: any) => console.log('a', a))
+  const destroyA = listen(tree.a, (a: any) => console.log('a', a))
   // 👉 a { b: { c: 1 } }
-  const destroyB = tree.a.b.listen((b: any) => console.log('b', b))
+  const destroyB = listen(tree.a.b, (b: any) => console.log('b', b))
   // 👉 b { c: 1 }
-  const destroyC = tree.a.b.c.listen((c: any) => console.log('c', c))
+  const destroyC = listen(tree.a.b.c, (c: any) => console.log('c', c))
   // 👉 c 1
-  const destroyD = tree.a.b.c.listen((d: any) => console.log('d', d))
+  const destroyD = listen(tree.a.b.c, (d: any) => console.log('d', d))
   // 👉 d 1
 
   // should also support sending the prev value
@@ -36,7 +36,7 @@ const test = () => {
 
   // 🙋‍♂️
   // 2. Modifying a parent notifies the relevant children listeners.
-  tree.a = { ...tree.a.val }
+  tree.a = { ...val(tree.a) }
   // 👉 a { b: { c: 2 } }
   // a is fired but b, c and d are not fired
   tree.a = { e: 1 }
