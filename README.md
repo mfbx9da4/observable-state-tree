@@ -26,7 +26,7 @@ console.log(tree)
 // prints the object 👉 { a: { b: { c : 1, d: 1 } } }
 
 // we can setup listeners
-const destroyRoot = listen(root, (root) => console.log('root', root))
+const destroyRoot = listen(tree, (root) => console.log('root', root))
 // on initial setup prints the full tree 👉 root { a: { b: { c: 1, d: 1 } } }
 const destroyA = listen(tree.a, (a) => console.log('a', a))
 // 👉 a { b: { c: 1 } }
