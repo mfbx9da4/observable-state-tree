@@ -39,6 +39,9 @@ export const createStateTree = (initial: any = {}) => {
     let listenerNode = listenerTree
     const empty = {}
 
+    // notify root listeners
+    listenerNode.listeners.map((x) => x(stateNode, listenerNode.prevValue))
+
     // notify parents
     for (let i = 0; i < path.length; i++) {
       const key = path[i]

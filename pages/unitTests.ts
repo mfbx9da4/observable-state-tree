@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { assert } from './../src/libs/assert'
+import { assert } from '../src/libs/assert'
 import { isEqual } from 'lodash'
 import { createStateTree } from '../src/libs/observableStateTree'
 import { Counter } from '../src/libs/Counter'
