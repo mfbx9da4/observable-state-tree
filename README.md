@@ -103,4 +103,4 @@ const useStoreState = (selector) => {
 
 ## Implementation
 
-Here is my implementation of the [observable state tree](https://github.com/mfbx9da4/observable-state-tree/blob/main/observableStateTree/observableStateTree.ts#L13). I couldn't quite get the above API but I came pretty close [by using proxies](https://github.com/mfbx9da4/observable-state-tree/blob/main/observableStateTree/dotNotationProxy.ts). See the [dot notation example here](https://github.com/mfbx9da4/observable-state-tree/blob/main/pages/dotNotationExample.tsx). See the [react example here](https://github.com/mfbx9da4/observable-state-tree/blob/main/pages/reactExample.tsx).
+Here is my implementation of the [observable state tree](https://github.com/mfbx9da4/observable-state-tree/blob/main/observableStateTree/observableStateTree.ts#L13). I couldn't quite get the above API but I came [pretty close by using proxies](https://github.com/mfbx9da4/observable-state-tree/blob/main/pages/dotNotationExample.tsx). See the [react example here](https://github.com/mfbx9da4/observable-state-tree/blob/main/pages/reactExample.tsx).
