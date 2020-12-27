@@ -17,7 +17,7 @@ Examples of the above requirements are given below.
 
 Performance requirements:
 
-- Modifying the tree should happen in O(1) time
+- Modifying the state tree should not evaluate all listeners. It should only evalutate the subset of listeners which are relevant define above.
 
 ### Suggested API
 
