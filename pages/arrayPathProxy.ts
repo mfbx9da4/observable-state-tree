@@ -12,8 +12,8 @@ export const createArrayPathProxy = (
         return createArrayPathProxy(onGet, onSet, specialKeys, [...path, key])
       },
       set: (target: any, key: string, value: unknown) => {
-        if (key === '_val') {
-          throw new Error('sorry you may not use _val as a key')
+        if (specialKeys.has(key)) {
+          throw new Error(`sorry you may not use "${key}" as a key`)
         }
         onSet([...path, key], value)
         return true

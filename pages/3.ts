@@ -6,30 +6,31 @@ import { createArrayPathProxy } from './arrayPathProxy'
 
 const createTree = (initial: any) => {
   const { get, set, listen } = createStateTree(initial)
-  const keys = new Set(['_val', '_listen'])
+  const keys = new Set(['val', 'listen'])
   const onGet = (key: string, path: string[]) => {
-    if (key === '_val') return get(path)
-    if (key === '_listen') return (callback) => listen(path, callback)
+    if (key === 'val') return get(path)
+    if (key === 'listen') return (callback) => listen(path, callback)
   }
   return createArrayPathProxy(onGet, set, keys) as any
 }
 
 const test = () => {
+  console.clear()
   const tree = createTree({ a: { b: { c: 1, d: 1 } } })
   // the tree behaves like a normal object e.g
-  console.log(tree)
+  console.log('tree', tree.val)
   // prints the object 👉 { a: { b: { c : 1, d: 1 } } }
 
   // we can setup listeners
-  const destroyRoot = tree._listen((root: any) => console.log('root', root))
+  const destroyRoot = tree.listen((root: any) => console.log('root', root))
   // on initial setup prints the full tree 👉 root { a: { b: { c: 1, d: 1 } } }
-  const destroyA = tree.a._listen((a) => console.log('a', a))
+  const destroyA = tree.a.listen((a) => console.log('a', a))
   // 👉 a { b: { c: 1 } }
-  const destroyB = tree.a.b._listen((b) => console.log('b', b))
+  const destroyB = tree.a.b.listen((b) => console.log('b', b))
   // 👉 b { c: 1 }
-  const destroyC = tree.a.b.c._listen((c) => console.log('c', c))
+  const destroyC = tree.a.b.c.listen((c) => console.log('c', c))
   // 👉 c 1
-  const destroyD = tree.a.b.c._listen((d) => console.log('d', d))
+  const destroyD = tree.a.b.c.listen((d) => console.log('d', d))
   // 👉 d 1
 
   // should also support sending the prev value
@@ -48,7 +49,7 @@ const test = () => {
 
   // 🙋‍♂️
   // 2. Modifying a parent notifies the relevant children listeners.
-  tree.a = { ...tree.a._val }
+  tree.a = { ...tree.a.val }
   // 👉 a { b: { c: 2 } }
   // a is fired but b, c and d are not fired
   tree.a = { e: 1 }

@@ -67,7 +67,6 @@ export const createStateTree = (initial: any = {}) => {
   }
 
   const set = (path: string[], value: any) => {
-    console.log('set', path, 'value', value)
     let node = stateTree
 
     if (!path.length) {
@@ -89,7 +88,7 @@ export const createStateTree = (initial: any = {}) => {
       node = next
     }
   }
-  const get = (path: string[]): any => {
+  const get = (path: string[] = []): any => {
     let node = stateTree
     for (let i = 0; i < path.length; i++) {
       const key = path[i]
