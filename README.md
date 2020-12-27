@@ -87,7 +87,7 @@ Setting a particular path with a value will:
 
 Use proxies for dot notation.
 
-### Applications
+### Real World Applications
 
 Later in react.js, could be used like so
 
