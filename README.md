@@ -13,7 +13,7 @@ Behaviour requirements:
 
 1. Modifying a subtree will notify all parent listeners.
 2. Modifying a sibling should not notify any siblings.
-3. Modifying a parent notifies the relevant children listeners.
+3. Modifying a parent only notifies the children listeners, if the children have also changed.
 
 Examples of the above requirements are given below.
 
