@@ -63,8 +63,7 @@ tree.a = { e: 1 }
 
 ### Implementation Sketch
 
-Use proxies for dot notation.
-Data structure consists of two trees:
+Data structure will consist of two trees:
 
 - state tree
 - listener tree
@@ -85,6 +84,8 @@ Setting a particular path with a value will:
 - update state tree
 - traverse parents => notify with new value
 - traverse listener children => notify with new value
+
+Use proxies for dot notation.
 
 ### Applications
 
