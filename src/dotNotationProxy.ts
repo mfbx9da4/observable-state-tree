@@ -1,4 +1,4 @@
-export const createArrayPathProxy = (
+export const createDotNotationProxy = (
   onGet: (key: string, path: string[]) => unknown,
   onSet: (path: string[], value: unknown) => void,
   specialKeys: Set<string>,
@@ -9,7 +9,7 @@ export const createArrayPathProxy = (
     {
       get: (target, key: string) => {
         if (specialKeys.has(key)) return onGet(key, path)
-        return createArrayPathProxy(onGet, onSet, specialKeys, [...path, key])
+        return createDotNotationProxy(onGet, onSet, specialKeys, [...path, key])
       },
       set: (target: any, key: string, value: unknown) => {
         if (specialKeys.has(key)) {

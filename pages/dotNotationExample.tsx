@@ -2,7 +2,7 @@ import { assert } from '../src/libs/assert'
 import { isEqual } from 'lodash'
 import { createStateTree } from '../src/libs/observableStateTree'
 import { Counter } from '../src/libs/Counter'
-import { createArrayPathProxy } from '../src/libs/arrayPathProxy'
+import { createArrayPathProxy } from '../src/libs/dotNotationProxy'
 
 const createTree = (initial: any) => {
   const { get, set, listen } = createStateTree(initial)
