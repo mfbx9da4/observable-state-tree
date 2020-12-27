@@ -52,13 +52,16 @@ tree.a.b.c = 2
 // a, b and c are fired but sibling d is not fired
 
 // 🙋‍♂️
-// 2. Modifying a parent notifies the relevant children listeners.
+// 3. Modifying a parent only notifies the children listeners, if the children have also changed.
 tree.a = { ...tree.a }
 // 👉 a { b: { c: 2 } }
 // a is fired but b, c and d are not fired
 tree.a = { e: 1 }
 // 👉 a { e: 1 }
-// b, c and d have been deleted so we just notify with undefined
+// 👉 b undefined
+// 👉 c undefined
+// 👉 d undefined
+// b, c and d have been deleted so they should be notified with undefined
 ```
 
 ### Implementation Sketch
@@ -104,4 +107,4 @@ const useStoreState = (selector) => {
 
 ## Implementation
 
-Here is my implementation of the [observable state tree](https://github.com/mfbx9da4/observable-state-tree/blob/main/observableStateTree/observableStateTree.ts#L13). I couldn't quite get the above API but I came [pretty close by using proxies](https://github.com/mfbx9da4/observable-state-tree/blob/main/pages/dotNotationExample.tsx). See the [react example here](https://github.com/mfbx9da4/observable-state-tree/blob/main/pages/reactExample.tsx).
+Here is my implementation of the [observable state tree](https://github.com/mfbx9da4/observable-state-tree/blob/main/observableStateTree/observableStateTree.ts#L13). I couldn't quite get the above API but I came [pretty close by using proxies](https://github.com/mfbx9da4/observable-state-tree/blob/main/pages/dotNotationExample.tsx). See the [react example here](https://github.com/mfbx9da4/observable-state-tree/blob/main/pages/reactExample.tsx). See the [rudimentary unit tests here](https://github.com/mfbx9da4/observable-state-tree/blob/main/pages/unitTests.ts).
