@@ -13,7 +13,7 @@ Behaviour requirements:
 
 1. Modifying a subtree will notify all parent listeners.
 2. Modifying a sibling should not notify any siblings.
-3. Modifying a parent notifies the relevant children listeners.
+3. Modifying a parent only notifies the children listeners, if the children have also changed.
 
 Examples of the above requirements are given below.
 
@@ -63,8 +63,7 @@ tree.a = { e: 1 }
 
 ### Implementation Sketch
 
-Use proxies for dot notation.
-Data structure consists of two trees:
+Data structure will consist of two trees:
 
 - State tree
 - Listener tree
@@ -86,7 +85,9 @@ Setting a particular path with a value will:
 - Traverse parents => notify with new value
 - Traverse listener children => notify with new value
 
-### Applications
+Use proxies for dot notation.
+
+### Real World Applications
 
 Later in react.js, could be used like so
 
