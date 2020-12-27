@@ -1,4 +1,4 @@
-import { assert } from './assert'
+import { assert } from '../utils/assert'
 
 type Callback = (value: any, prevValue: any) => void
 

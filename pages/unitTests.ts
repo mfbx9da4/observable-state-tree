@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { assert } from '../src/libs/assert'
+import { assert } from '../utils/assert'
 import { isEqual } from 'lodash'
-import { createStateTree } from '../src/libs/observableStateTree'
-import { Counter } from '../src/libs/Counter'
+import { createStateTree } from '../src/observableStateTree'
+import { Counter } from '../utils/Counter'
 const test = () => {
   console.clear()
   console.log('===== 🐎 ===== ')

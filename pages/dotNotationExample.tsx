@@ -1,8 +1,8 @@
-import { assert } from '../src/libs/assert'
+import { assert } from '../utils/assert'
 import { isEqual } from 'lodash'
-import { createStateTree } from '../src/libs/observableStateTree'
-import { Counter } from '../src/libs/Counter'
-import { createArrayPathProxy } from '../src/libs/dotNotationProxy'
+import { createStateTree } from '../src/observableStateTree'
+import { Counter } from '../utils/Counter'
+import { createDotNotationProxy } from '../src/dotNotationProxy'
 
 const createTree = (initial: any) => {
   const { get, set, listen } = createStateTree(initial)
@@ -11,7 +11,7 @@ const createTree = (initial: any) => {
     if (key === 'val') return get(path)
     if (key === 'listen') return (callback) => listen(path, callback)
   }
-  return createArrayPathProxy(onGet, set, keys) as any
+  return createDotNotationProxy(onGet, set, keys) as any
 }
 
 const test = () => {
