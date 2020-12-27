@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { createStore } from '../observableStateTree/stringNotation'
 
-const { listen, set } = createStore({ a: { b: 2 } })
+const { listen, set } = createStore({ a: { b: 0 } })
 
 const useStoreState = (selector: string = '') => {
   const [state, setState] = useState()
