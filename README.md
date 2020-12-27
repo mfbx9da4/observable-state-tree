@@ -66,25 +66,25 @@ tree.a = { e: 1 }
 Use proxies for dot notation.
 Data structure consists of two trees:
 
-- state tree
-- listener tree
+- State tree
+- Listener tree
 
 State tree is a standard object which is the actual state tree object.
 Listener tree is the tree of listeners.
 
 Each node in the listener tree has:
 
-- children listeners
-- parent listeners
-- listenerCallbacks
+- Children listeners
+- Parent listeners
+- Listener callbacks
 
 Getting a particular path will just return that node of the state tree:
 
 Setting a particular path with a value will:
 
-- update state tree
-- traverse parents => notify with new value
-- traverse listener children => notify with new value
+- Update state tree
+- Traverse parents => notify with new value
+- Traverse listener children => notify with new value
 
 ### Applications
 
