@@ -1,4 +1,7 @@
+import { assert } from './assert'
+
 type Callback = (value: any, prevValue: any) => void
+
 type DestroyCallback = () => void
 interface ListenerNode {
   parent: Symbol | ListenerNode
@@ -6,6 +9,7 @@ interface ListenerNode {
   prevValue: any
   listeners: Callback[]
 }
+
 export const createStateTree = (initial: any = {}) => {
   let stateTree: any = initial
   const root = Symbol()
@@ -66,19 +70,21 @@ export const createStateTree = (initial: any = {}) => {
     }
   }
 
-  const set = (path: string[], value: any) => {
-    let node = stateTree
+  const set = (path: string[] = [], value: any) => {
+    assert(Array.isArray(path), 'path must be array', { path })
 
+    // update the root
     if (!path.length) {
       stateTree = value
-      return notify(path)
     }
 
+    // update a deep key
+    let node = stateTree
     for (let i = 0; i < path.length; i++) {
       const key = path[i]
       if (i === path.length - 1) {
         node[key] = value
-        return notify(path)
+        break
       }
       let next = node[key]
       if (!next) {
@@ -87,11 +93,12 @@ export const createStateTree = (initial: any = {}) => {
       }
       node = next
     }
+
+    return notify(path)
   }
   const get = (path: string[] = []): any => {
     let node = stateTree
-    for (let i = 0; i < path.length; i++) {
-      const key = path[i]
+    for (const key of path) {
       node = node[key]
     }
     return node

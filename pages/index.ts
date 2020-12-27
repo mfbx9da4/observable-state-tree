@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { assert } from './../src/libs/assert'
 import { isEqual } from 'lodash'
 import { createStateTree } from '../src/libs/observableStateTree'
@@ -62,6 +63,7 @@ const test = () => {
 }
 
 export default function Home() {
+  useEffect(test, [])
   return 'hey'
 }
 

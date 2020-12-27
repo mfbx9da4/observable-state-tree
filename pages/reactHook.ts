@@ -1,4 +1,4 @@
-import { assert } from './../src/libs/assert'
+import { assert } from '../src/libs/assert'
 import { createStateTree } from '../src/libs/observableStateTree'
 import { Counter } from '../src/libs/Counter'
 import { createArrayPathProxy } from './arrayPathProxy2'
