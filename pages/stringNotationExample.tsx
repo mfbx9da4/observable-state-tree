@@ -1,24 +1,9 @@
-import { assert } from '../utils/assert'
-import { createStateTree } from '../src/observableStateTree'
-import { Counter } from '../utils/Counter'
-import { createArrayPathProxy } from './arrayPathProxy2'
-import { stringify } from 'gray-matter'
 import { useEffect } from 'react'
-
-const asPath = (key: string | string[]) => (typeof key === 'string' ? key.split('.').filter(Boolean) : key)
-
-const createTree = (initial: any) => {
-  const { get, set, listen } = createStateTree(initial)
-  return {
-    state: () => get(),
-    set: (key: string | string[], value: any) => set(asPath(key), value),
-    listen: (key: string | string[], callback: (x: any) => void) => listen(asPath(key), callback),
-  }
-}
+import { createStore } from '../observableStateTree/stringNotation'
 
 const test = () => {
   console.clear()
-  const { state, set, listen } = createTree({ a: { b: { c: 1, d: 1 } } })
+  const { state, set, listen } = createStore({ a: { b: { c: 1, d: 1 } } })
   // the tree behaves like a normal object e.g
   console.log('tree', state())
   // prints the object 👉 { a: { b: { c : 1, d: 1 } } }
@@ -57,6 +42,12 @@ const test = () => {
   set('a', { e: 1 })
   // 👉 a { e: 1 }
   // b, c and d have been deleted so we just notify with undefined
+
+  // cleanup
+  destroyA()
+  destroyB()
+  destroyC()
+  destroyD()
 }
 
 export default function Home() {

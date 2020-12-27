@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { assert } from '../utils/assert'
 import { isEqual } from 'lodash'
-import { createStateTree } from '../src/observableStateTree'
+import { createStateTree } from '../observableStateTree/observableStateTree'
 import { Counter } from '../utils/Counter'
 const test = () => {
   console.clear()

@@ -1,23 +1,9 @@
-import { assert } from '../utils/assert'
-import { isEqual } from 'lodash'
-import { createStateTree } from '../src/observableStateTree'
-import { Counter } from '../utils/Counter'
-import { createDotNotationProxy } from '../src/dotNotationProxy'
 import { useEffect } from 'react'
-
-const createTree = (initial: any) => {
-  const { get, set, listen } = createStateTree(initial)
-  const keys = new Set(['val', 'listen'])
-  const onGet = (key: string, path: string[]) => {
-    if (key === 'val') return get(path)
-    if (key === 'listen') return (callback) => listen(path, callback)
-  }
-  return createDotNotationProxy(onGet, set, keys) as any
-}
+import { createStore } from '../observableStateTree/dotNotation'
 
 const test = () => {
   console.clear()
-  const tree = createTree({ a: { b: { c: 1, d: 1 } } })
+  const tree = createStore({ a: { b: { c: 1, d: 1 } } })
   // the tree behaves like a normal object e.g
   console.log('tree', tree.val)
   // prints the object 👉 { a: { b: { c : 1, d: 1 } } }
@@ -56,6 +42,12 @@ const test = () => {
   tree.a = { e: 1 }
   // 👉 a { e: 1 }
   // b, c and d have been deleted so we just notify with undefined
+
+  // cleanup
+  destroyA()
+  destroyB()
+  destroyC()
+  destroyD()
 }
 
 export default function Home() {

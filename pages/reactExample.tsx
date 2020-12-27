@@ -1,34 +1,16 @@
-import { assert } from '../utils/assert'
-import { createStateTree } from '../src/observableStateTree'
-import { Counter } from '../utils/Counter'
-import { createArrayPathProxy } from './arrayPathProxy2'
-import { stringify } from 'gray-matter'
 import { useEffect, useState } from 'react'
+import { createStore } from '../observableStateTree/stringNotation'
 
-const asPath = (key: string | string[]) => (typeof key === 'string' ? key.split('.').filter(Boolean) : key)
+const { listen, set } = createStore({ a: { b: 2 } })
 
-const createTree = (initial: any) => {
-  const { get, set, listen } = createStateTree(initial)
-  return {
-    state: () => get(),
-    set: (key: string | string[], value: any) => set(asPath(key), value),
-    listen: (key: string | string[], callback: (x: any) => void) => listen(asPath(key), callback),
-  }
+const useStoreState = (selector: string = '') => {
+  const [state, setState] = useState()
+  useEffect(() => listen(selector, (value) => setState({ ...value })), [])
+  return state
 }
 
-const { listen, set } = createTree({ a: { b: 2 } })
-
 export default function Home() {
-  const [state, setState] = useState()
-
-  useEffect(
-    () =>
-      listen('', (value) => {
-        console.log('va', value)
-        setState({ ...value })
-      }),
-    []
-  )
+  const state = useStoreState('a')
 
   return (
     <div>
