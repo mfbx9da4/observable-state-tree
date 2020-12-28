@@ -4,7 +4,7 @@ The below is a programming challenge I set myself on boxing day 2020. Give it a 
 
 ### Problem statement
 
-Create an observable state tree.
+Build an observable state tree.
 
 An observable state tree is a normal object except that listeners can
 be bound to any subtree of the state tree.
