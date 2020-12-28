@@ -1,4 +1,4 @@
-# Observable state tree
+# Observable State Tree
 
 The below is a programming challenge I set myself on boxing day 2020. Give it a go! 🎄🦌
 
