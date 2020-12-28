@@ -1,7 +1,6 @@
 # Observable state tree
 
-The below is a programming challenge I set myself on boxing day 2020. Give it a go! 
-### 🎄🦌
+The below is a programming challenge I set myself on boxing day 2020. Give it a go! 🎄🦌
 
 ### Problem statement
 
