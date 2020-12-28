@@ -16,7 +16,7 @@ Behaviour requirements:
 
 Examples of the above requirements are given below.
 
-### Suggested API
+### Examples / Suggested API
 
 The below code should be viewed as pseudocode to demonstrate the usage of the data structure. You may wish to tweak the API to be ergonomic or practical as you see fit.
 
