@@ -18,7 +18,7 @@ Examples of the above requirements are given below.
 
 ### Examples and Proposed API
 
-The below code should be viewed as pseudocode to demonstrate the usage of the data structure. You may wish to tweak the API to be ergonomic or practical as you see fit.
+The below code should be viewed as pseudocode to demonstrate the usage of the data structure. You may wish to tweak the API to be more ergonomic or practical as you see fit.
 
 ```js
 const tree = createTree({ a: { b: { c: 1, d: 1 } } })
