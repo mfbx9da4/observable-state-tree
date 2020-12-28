@@ -6,8 +6,7 @@ The below is a programming challenge I set myself on boxing day 2020. Give it a 
 
 Build an observable state tree.
 
-An observable state tree is a normal object except that listeners can
-be bound to any subtree of the state tree.
+An observable state tree is a normal object except that listeners can be bound to any subtree of the state tree.
 
 Behaviour requirements:
 
@@ -18,6 +17,8 @@ Behaviour requirements:
 Examples of the above requirements are given below.
 
 ### Suggested API
+
+The below code should be viewed as pseudocode to demonstrate the usage of the data structure. You may wish to tweak the API to be ergonomic or practical as you see fit.
 
 ```js
 const tree = createTree({ a: { b: { c: 1, d: 1 } } })
