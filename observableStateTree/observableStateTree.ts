@@ -11,16 +11,19 @@ interface ListenerNode {
   listeners: Callback[]
 }
 
+// used when listener is first bound, we emit the value but there is no previous value
+export const initialValue = Symbol('initialValue')
+
 export interface StateTree {
   get: (path?: string[]) => any
   set: (path: string[], value: any) => void
   listen: (path: string[], callback: Callback) => DestroyCallback
 }
 
-export const createStateTree = (initial: any = {}): StateTree => {
-  const root = Symbol()
-  let stateTree: any = initial
-  const listenerTree: ListenerNode = { parent: root, children: {}, listeners: [], prevValue: initial }
+export const createStateTree = (initialState: any = {}): StateTree => {
+  const root = Symbol('root')
+  let stateTree: any = initialState
+  const listenerTree: ListenerNode = { parent: root, children: {}, listeners: [], prevValue: initialValue }
 
   const get = (path: string[] = []): any => {
     // returns the value directly from the state tree
@@ -77,7 +80,7 @@ export const createStateTree = (initial: any = {}): StateTree => {
     node.listeners.push(callback)
 
     // notify this new listener inline for the first time
-    callback(value, value)
+    callback(value, initialValue)
 
     return () => {
       // tear down
