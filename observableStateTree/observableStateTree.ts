@@ -128,5 +128,5 @@ export const createStateTree = (initialState: any = {}): StateTree => {
     }
   }
 
-  return { set, get, listen }
+  return { get, set, listen }
 }
