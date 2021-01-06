@@ -29,6 +29,7 @@ console.log(tree)
 // we can setup listeners
 const destroyRoot = listen(tree, (root) => console.log('root', root))
 // on initial setup prints the full tree 👉 root { a: { b: { c: 1, d: 1 } } }
+// the return value is a function which destroys the listener
 const destroyA = listen(tree.a, (a) => console.log('a', a))
 // 👉 a { b: { c: 1 } }
 const destroyB = listen(tree.a.b, (b) => console.log('b', b))
